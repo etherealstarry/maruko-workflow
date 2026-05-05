@@ -41,7 +41,7 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 .filter-tab:hover { color: var(--text-soft); }
 .filter-tab.active { color: var(--text); border-color: var(--line); background: var(--bg-warm); }
 
-/* ── Ideas: compact, light ── */
+/* ── Ideas ── */
 .idea-item { display: flex; align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .idea-item:hover .del-btn, .idea-item:hover .edit-btn { opacity: 1; }
 .idea-cat { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); min-width: 44px; font-weight: 400; flex-shrink: 0; }
@@ -71,25 +71,24 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 .add-task input { flex:1; padding: 12px 14px; border: 1px solid var(--line); background: var(--white); font-size: 1rem; letter-spacing: 0.01em; outline: none; font-family: inherit; }
 .add-task button { padding: 12px 18px; background: var(--text); color: white; border: none; font-size: 0.9rem; cursor: pointer; font-family: inherit; }
 
-/* ── Search ── */
-.search-wrap { display: flex; align-items: center; gap: 16px; background: var(--white); padding: 20px 24px; border: 1px solid var(--line); }
-.search-wrap input { flex:1; border: none; outline: none; font-size: 1.05rem; font-family: inherit; color: var(--text); }
-.search-wrap input::placeholder { color: var(--text-faint); }
-
 /* ── Calendar Briefing ── */
 .cal-grid { display: flex; flex-wrap: wrap; gap: 6px; }
-.cal-day { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-soft); cursor: pointer; border: 1px solid transparent; transition: all 0.2s; position: relative; }
+.cal-day { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-soft); cursor: pointer; border: 1px solid transparent; transition: all 0.2s; }
 .cal-day:hover { border-color: var(--line); }
 .cal-day.active { background: var(--text); color: white; }
 .cal-day.has-content::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
 .cal-day.active.has-content::after { background: white; }
-.briefing-detail { margin-top: 20px; padding: 24px; border: 1px solid var(--line); display: none; }
-.briefing-detail.active { display: block; }
+.briefing-detail { margin-top: 20px; padding: 24px; border: 1px solid var(--line); }
 .briefing-detail h4 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 1.15rem; font-weight: 400; margin-bottom: 12px; }
 .briefing-detail ul { padding-left: 20px; }
 .briefing-detail li { font-size: 0.95rem; color: var(--text-soft); margin-bottom: 4px; line-height: 1.7; }
 .briefing-detail .teaser { margin-top: 10px; font-size: 0.9rem; color: var(--accent); font-style: italic; }
 .cal-month { font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-faint); text-transform: uppercase; margin-bottom: 10px; }
+
+/* ── Search ── */
+.search-wrap { display: flex; align-items: center; gap: 16px; background: var(--white); padding: 20px 24px; border: 1px solid var(--line); }
+.search-wrap input { flex:1; border: none; outline: none; font-size: 1.05rem; font-family: inherit; color: var(--text); }
+.search-wrap input::placeholder { color: var(--text-faint); }
 
 /* ── Papers: accordion ── */
 .paper-row { padding: 16px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
@@ -128,6 +127,7 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 
 .res-link { display: flex; align-items: center; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--text); font-size: 1.05rem; letter-spacing: 0.01em; transition: padding-left 0.3s; }
 .res-link:hover { padding-left: 10px; }
+.res-updated { font-size: 0.7rem; color: var(--text-faint); margin-left: auto; }
 
 .jump-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
 .jump-btn { background: var(--text); color: white; border: none; padding: 14px 28px; font-size: 0.9rem; cursor: pointer; font-family: inherit; letter-spacing: 0.03em; }
@@ -148,9 +148,9 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 
 <div class="card">
 <div class="card-label">灵感收件箱</div>
-<div class="help-text">点击分类标签筛选。hover 可 ✎ 修改 / ✕ 删除，底部自己添加。</div>
+<div class="help-text">Cola 从对话提取。点击分类标签筛选，hover ✎ 修改 / ✕ 删除，底部自己添加。</div>
 <div class="filter-tabs" id="filterTabs"></div>
-<div class="idea-list" id="ideaList"></div>
+<div class="idea-list" id="ideaList"><div class="meta" style="padding:8px 0;">加载灵感…</div></div>
 <div class="add-idea">
 <select id="ideaCat"><option>TMS</option><option>IELTS</option><option>学习</option><option>筋膜</option><option>工具</option><option>生活</option><option>科研</option></select>
 <input id="ideaInput" placeholder="新灵感…" onkeydown="if(event.key==='Enter')addIdea()">
@@ -171,7 +171,6 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 <button onclick="addTask()">+</button>
 </div>
 </div>
-
 <div class="jump-bar"><span></span><button class="jump-btn" onclick="goPage(1)">选题工坊 →</button></div>
 </div>
 
@@ -181,15 +180,14 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 
 <div class="card">
 <div class="card-label">每日研究简报</div>
-<div class="cal-month" id="calMonth">2026 / 05</div>
-<div class="cal-grid" id="calGrid"></div>
+<div class="cal-month">2026 / 05</div>
+<div class="cal-grid" id="calGrid"><div class="meta">加载简报…</div></div>
 <div class="briefing-detail" id="briefingDetail"></div>
 </div>
 
 <div class="search-wrap"><span style="font-size:1.2rem;">🔍</span><input id="paperSearch" placeholder="搜索论文…" oninput="filterPapers()"></div>
-
-<div class="card"><div class="card-label">论文数据库</div><div id="paperList"></div></div>
-<div class="card"><div class="card-label">今日推荐选题</div><div id="recList"></div></div>
+<div class="card"><div class="card-label">论文数据库</div><div id="paperList"><div class="meta" style="padding:16px 0;">加载论文…</div></div></div>
+<div class="card"><div class="card-label">今日推荐选题</div><div id="recList"><div class="meta" style="padding:16px 0;">加载推荐…</div></div></div>
 <div class="jump-bar"><button class="jump-btn ghost" onclick="goPage(0)">← 灵感</button><button class="jump-btn" onclick="goPage(2)">学习进度 →</button></div>
 </div>
 
@@ -209,64 +207,12 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 </div>
 
 <script>
-// ═══ EMBEDDED DATA ═══
-const EMBED={
-  ideas:[
-    {id:"e1",category:"TMS",text:"cTBS 实验设计（SICI/ICF 验证皮层抑制）",date:"5/2"},
-    {id:"e2",category:"学习",text:"48h 法学透统计+实验设计+神经科学",date:"5/4"},
-    {id:"e3",category:"IELTS",text:"Task1 intro 改写（填空模板练 paraphrase）",date:"5/2"},
-    {id:"e4",category:"筋膜",text:"疾痛菜谱实战（选真实案例走 CC 点触诊）",date:"5/3"},
-    {id:"e5",category:"工具",text:"小红书→Cola 看封面工作流",date:"5/5"},
-    {id:"e6",category:"生活",text:"人生养成游戏（Claude 网页版调积分）",date:"5/5"},
-    {id:"e7",category:"工具",text:"梦工厂使用复盘（bug+新功能愿望单）",date:"5/5"},
-    {id:"e8",category:"TMS",text:"运动控制综述精读（24选3做48h法）",date:"5/4"},
-    {id:"e9",category:"学习",text:"统计预习 Motulsky 丢 AI 问框架",date:"5/4"},
-    {id:"e10",category:"TMS",text:"SICI AP/PA 电流方向论文",date:"5/3"},
-    {id:"e11",category:"工具",text:"梦工厂手机同步测试",date:"5/5"},
-    {id:"e12",category:"学习",text:"每日 TMS 论文（摘要→翻译→讨论）",date:"5/3"},
-    {id:"e13",category:"科研",text:"雷教授组会 5min 汇报（SICI/ICF/TBS）",date:"5/3"},
-    {id:"e14",category:"IELTS",text:"顾家北写作 D1（审题→提纲→首段）",date:"5/2"},
-    {id:"e15",category:"生活",text:"驾照科一 20题/天",date:"5/2"},
-    {id:"e16",category:"工具",text:"个人网站 Apple 极简+胶片感",date:"5/5"},
-    {id:"e17",category:"科研",text:"TUS 超声可塑性文献跟踪",date:"5/3"},
-    {id:"e18",category:"工具",text:"工作流三页看板+云同步",date:"5/5"}
-  ],
-  briefing:{
-    "5-2":{title:"TMS 入门：三个核心概念",items:["TMS 原理——法拉第电磁感应，线圈产生磁场穿透颅骨诱导皮层电流。","单脉冲测 MEP、成对脉冲测 SICI/ICF、重复脉冲改可塑性。","安全底线——癫痫史、颅内金属高危，阈值从低开始。"],teaser:"💡 明日选题：为什么 TMS 不能刺激深部脑区？TUS 能解决吗？"},
-    "5-3":{title:"从 MEP 到 LTP：一条线串起来",items:["MEP 是 TMS 的「输出信号」——刺激 M1 后在靶肌肉记录。","皮质脊髓束是通路——M1 第5层→脊髓运动神经元。","LTP/LTD 是机制——TBS 就是人为诱导 LTP/LTD。"],teaser:"💡 明日选题：Metaplasticity——同样的 TMS 参数，不同时间效果为何不同？"},
-    "5-5":{title:"TMS 皮层内回路：你学到哪了",items:["SICI 反映 GABA_A 抑制——SICI 变小=皮层更容易兴奋 ✅","ICF 反映谷氨酸兴奋——SICI+ICF 是判断皮层状态的指标对。","TBS——iTBS 增强（像 LTP）、cTBS 抑制（像 LTD），3脉冲50Hz×5Hz重复。"],teaser:"💡 明日选题：SICI 电流方向依赖性（AP vs PA）——直接关联实验参数选择。"}
-  },
-  papers:[
-    {title:"Bidirectional plasticity induced by transcranial ultrasound stimulation",summary:"经颅超声刺激可诱导双向可塑性——低频抑制、高频增强，机制涉及钙信号和 BDNF 通路。",tags:["TUS","可塑性","LTP/LTD"]},
-    {title:"Short-interval intracortical inhibition: AP vs. PA",summary:"SICI 强度受 TMS 电流方向影响——PA 电流诱发的 SICI 比 AP 更强，不同皮层回路参与。",tags:["SICI","TMS","电流方向"]},
-    {title:"Accelerated TMS for autism spectrum disorder",summary:"加速 TMS 方案在自闭症中的初步应用，高频 rTMS 靶向 DLPFC 改善社交认知。",tags:["TMS","自闭症","rTMS"]},
-    {title:"Metaplasticity: tuning synapses and networks",summary:"可塑性本身受过往活动历史调节——LTP/LTD 阈值动态变化，BCM 理论框架。",tags:["metaplasticity","LTP","BCM"]},
-    {title:"Cortical disinhibition and LTP-like plasticity",summary:"皮层去抑制(GABA_A↓)为 LTP 样可塑性打开窗口，SICI 降低预示更高诱导成功率。",tags:["SICI","LTP","去抑制"]},
-    {title:"Paired associative stimulation: sensorimotor plasticity",summary:"PAS 将外周神经+TMS 配对模拟 STDP——ISI 25ms 诱导 LTP，10ms 诱导 LTD。",tags:["PAS","STDP","可塑性"]},
-    {title:"Homeostatic plasticity in human motor cortex",summary:"稳态可塑性维持皮层兴奋性——先前兴奋水平决定后续 TMS 效应的方向。",tags:["稳态可塑性","metaplasticity","TMS"]},
-    {title:"Theta burst stimulation: mechanisms and clinical applications",summary:"TBS 全面综述——iTBS/cTBS 突触机制(NMDA/GABA/Ca²⁺)、抑郁/卒中/疼痛应用。",tags:["TBS","综述","临床"]}
-  ],
-  recs:[
-    {title:"Motor learning and TMS: do we need a new framework?",tags:["运动学习","TMS","理论"],why:"连接你两个核心兴趣——运动控制+TMS，质疑经典模型，做批判性阅读训练。"},
-    {title:"Individual differences in TMS response",tags:["个体差异","TMS","可塑性"],why:"为什么同样参数不同人效果不同？GABA浓度、基因、昼夜节律都可能是因素。"},
-    {title:"Ecological validity of motor neuroscience",tags:["运动神经科学","生态效度","方法论"],why:"挑战 TMS 实验室范式局限——真实动作比单关节复杂得多，方法论批判论文。"}
-  ],
-  progress:[
-    {label:"🧠 TMS 学习",current:4,total:8},
-    {label:"📝 IELTS 备考",current:1,total:4},
-    {label:"🚗 驾驶课",current:0,total:4}
-  ],
-  concepts:[
-    {n:"MEP",d:"运动诱发电位——TMS刺激运动皮层后在靶肌肉记录到的电信号。"},{n:"皮质脊髓束",d:"从运动皮层到脊髓运动神经元的直接通路。"},{n:"LTP",d:"长时程增强——突触传递效率的持久增强。"},{n:"LTD",d:"长时程抑制——突触传递效率的持久减弱。"},{n:"SICI",d:"短间隔皮层内抑制——GABA_A介导。"},{n:"ICF",d:"皮层内易化——谷氨酸能兴奋性。"},{n:"TBS",d:"Theta爆发式刺激——iTBS增强、cTBS抑制。"},{n:"神经可塑性",d:"神经系统响应经验改变结构和功能的能力。"},{n:"筋膜CC点",d:"协调中心，意大利筋膜手法关键触诊点。"},{n:"AN-LU",d:"前向序列-上肢，筋膜手法运动序列。"},{n:"RE-LU",d:"后向序列-上肢，筋膜手法运动序列。"}
-  ]
-};
-
 // ═══ Cloud Sync ═══
 (function(){var a='gho_X4RT5RV6TA7dn',b='C75M89mNWuScBgBaI18seKF';window._ST=a+b;})();
 const SYNC_URL='https://api.github.com/repos/etherealstarry/maruko-workflow/contents/workflow-save.json';
 let _syncTS=0, _syncing=false;
 async function syncFromCloud(){
-  try{const r=await fetch('workflow-save.json?t='+Date.now(),{headers:{'Cache-Control':'no-cache'}});if(!r.ok)return;const d=await r.json();if(!d._syncedAt||d._syncedAt<=_syncTS)return;if(d.tasks){const ids=new Set(T.map(t=>t.id));for(const ct of d.tasks){if(!ids.has(ct.id))T.push(ct);else{const ix=T.findIndex(t=>t.id===ct.id);if(ix>=0)T[ix]=ct;}}sT();rT();}if(d.ideas){const ids=new Set(I.map(i=>i.id));let c=false;for(const ci of d.ideas){if(ids.has(ci.id)){const ix=I.findIndex(i=>i.id===ci.id);if(ix>=0&&ci._syncedAt>=(I[ix]._syncedAt||0)){I[ix]=ci;c=true;}}else{I.push(ci);c=true;}}if(c){sI();rI();}}if(d.progress){let c=false;for(const cp of d.progress){const px=P.findIndex(p=>p.label===cp.label);if(px>=0&&cp._syncedAt>=(P[px]._syncedAt||0)){P[px]=cp;c=true;}}if(c){sP();rP();}}_syncTS=d._syncedAt||0;}catch(e){}
+  try{const r=await fetch('workflow-save.json?t='+Date.now(),{headers:{'Cache-Control':'no-cache'}});if(!r.ok)return;const d=await r.json();if(!d._syncedAt||d._syncedAt<=_syncTS)return;if(d.tasks){const ids=new Set(T.map(t=>t.id));for(const ct of d.tasks){if(!ids.has(ct.id))T.push(ct);else{const ix=T.findIndex(t=>t.id===ct.id);if(ix>=0)T[ix]=ct;}}sT();rT();}if(d.ideas){const ids=new Set(I.map(i=>i.id));let c=false;for(const ci of d.ideas){if(ids.has(ci.id)){const ix=I.findIndex(i=>i.id===ci.id);if(ix>=0&&ci._syncedAt>=(I[ix]._syncedAt||0)){I[ix]=ci;c=true;}}else{I.push(ci);c=true;}}if(c){sI();rFT();rI();}}if(d.progress){let c=false;for(const cp of d.progress){const px=P.findIndex(p=>p.label===cp.label);if(px>=0&&cp._syncedAt>=(P[px]._syncedAt||0)){P[px]=cp;c=true;}}if(c){sP();rP();}}_syncTS=d._syncedAt||0;}catch(e){}
 }
 async function syncToCloud(){
   if(_syncing)return;_syncing=true;try{const p={tasks:T,ideas:I,progress:P,_syncedAt:Date.now()};const c=btoa(unescape(encodeURIComponent(JSON.stringify(p))));const gr=await fetch(SYNC_URL+'?ref=main',{headers:{'Authorization':'Bearer '+window._ST}});const sha=gr.ok?(await gr.json()).sha:null;await fetch(SYNC_URL,{method:'PUT',headers:{'Authorization':'Bearer '+window._ST,'Content-Type':'application/json'},body:JSON.stringify({message:'sync',content:c,branch:'main',sha:sha||undefined})});}catch(e){}_syncing=false;
@@ -276,6 +222,35 @@ let _st=null;function debounceSync(){clearTimeout(_st);_st=setTimeout(syncToClou
 // ═══ Page Nav ═══
 let cp=0;
 function goPage(n){if(n<0||n>=3)return;document.querySelectorAll('.page')[cp].classList.remove('active');cp=n;document.querySelectorAll('.page')[cp].classList.add('active');window.scrollTo({top:0,behavior:'instant'});}
+
+// ═══ Data Fetch ═══
+let DATA={briefing:{},papers:[],recs:[],baseIdeas:[]};
+
+async function loadData(){
+  // Fetch from JSON files with cache-busting
+  async function fetchJSON(fn){try{const r=await fetch(fn+'?t='+Date.now(),{headers:{'Cache-Control':'no-cache'}});if(!r.ok)throw 0;return await r.json();}catch(e){return null;}}
+  const [briefing, papersData, ideasData] = await Promise.all([
+    fetchJSON('workflow-briefing.json'),
+    fetchJSON('workflow-papers.json'),
+    fetchJSON('workflow-ideas.json')
+  ]);
+  if(briefing){DATA.briefing=briefing;localStorage.setItem('wf_cache_b',JSON.stringify(briefing));}
+  else{DATA.briefing=JSON.parse(localStorage.getItem('wf_cache_b')||'{}');}
+  if(papersData){DATA.papers=papersData.papers||[];DATA.recs=papersData.recs||[];localStorage.setItem('wf_cache_p',JSON.stringify(papersData));}
+  else{const c=JSON.parse(localStorage.getItem('wf_cache_p')||'null');if(c){DATA.papers=c.papers||[];DATA.recs=c.recs||[];}}
+  if(ideasData){DATA.baseIdeas=ideasData.ideas||[];localStorage.setItem('wf_cache_i',JSON.stringify(ideasData));}
+  else{const c=JSON.parse(localStorage.getItem('wf_cache_i')||'null');if(c)DATA.baseIdeas=c.ideas||[];}
+
+  // Merge base ideas with user ideas
+  _mergeIdeas();
+  rCal();fP();rR();rFT();rI();
+}
+function _mergeIdeas(){
+  if(!DATA.baseIdeas.length)return;
+  const bm=new Map(DATA.baseIdeas.map(i=>[i.id,i]));
+  for(const bi of DATA.baseIdeas){if(!I.find(i=>i.id===bi.id)){I.push({id:bi.id,text:bi.text,category:bi.category||'TMS',date:bi.date||'',_edited:false});}}
+  sI();
+}
 
 // ═══ Tasks ═══
 let T=JSON.parse(localStorage.getItem('wf_t')||'[]');
@@ -290,65 +265,72 @@ function rT(){
 }
 
 // ═══ Ideas ═══
-let I=JSON.parse(localStorage.getItem('wf_i')||'null')||EMBED.ideas.map(i=>({...i,_edited:false}));
+let I=JSON.parse(localStorage.getItem('wf_i')||'[]');
 let _ifilter='all';
 function sI(){localStorage.setItem('wf_i',JSON.stringify(I));debounceSync();}
-function addIdea(){const v=document.getElementById('ideaInput').value.trim(),ct=document.getElementById('ideaCat').value;if(!v)return;I.push({id:'u'+Date.now(),text:v,category:ct,date:new Date().toLocaleDateString('zh-CN',{month:'numeric',day:'numeric'}),_edited:true});document.getElementById('ideaInput').value='';sI();rI();}
-function delI(id){if(!confirm('删除？'))return;I=I.filter(i=>i.id!==id);sI();rI();}
+function addIdea(){const v=document.getElementById('ideaInput').value.trim(),ct=document.getElementById('ideaCat').value;if(!v)return;I.push({id:'u'+Date.now(),text:v,category:ct,date:new Date().toLocaleDateString('zh-CN',{month:'numeric',day:'numeric'}),_edited:true});document.getElementById('ideaInput').value='';sI();rFT();rI();}
+function delI(id){if(!confirm('删除？'))return;I=I.filter(i=>i.id!==id);sI();rFT();rI();}
 function editI(id,el){const i=I.find(x=>x.id===id);if(!i)return;const cur=el.querySelector('.idea-text'),inp=document.createElement('input');inp.value=i.text;inp.style.cssText='flex:1;font-size:0.9rem;padding:2px 0;background:white;border:none;border-bottom:1px solid var(--line);outline:none;font-family:inherit;color:var(--text-soft);';el.replaceChild(inp,cur);inp.focus();inp.select();inp.onblur=inp.onkeydown=function(e){if(e&&e.key!=='Enter')return;const v=inp.value.trim();if(v){i.text=v;i._edited=true;sI();}rI();};}
 function rFT(){
+  if(!I.length)return;
   const cats=['all',...new Set(I.map(i=>i.category))];
   document.getElementById('filterTabs').innerHTML=cats.map(c=>`<span class="filter-tab${_ifilter===c?' active':''}" onclick="_ifilter='${c}';rFT();rI();">${c==='all'?'全部':c}</span>`).join('');
 }
 function rI(){
+  if(!I.length){I=JSON.parse(localStorage.getItem('wf_i')||'[]');}
   const el=document.getElementById('ideaList');
+  if(!I.length){el.innerHTML='<div class="meta" style="padding:8px 0;">还没有灵感～</div>';return;}
   const fl=_ifilter==='all'?I:I.filter(i=>i.category===_ifilter);
   if(!fl.length){el.innerHTML='<div class="meta" style="padding:8px 0;">这个分类下还没有灵感～</div>';return;}
   el.innerHTML=fl.map(i=>`<div class="idea-item"><span class="idea-cat">${_esc(i.category)}</span><div class="idea-body"><span class="idea-text">${_esc(i.text)}</span><button class="edit-btn" onclick="editI('${i.id}',this.parentElement)" title="修改">✎</button><button class="del-btn" onclick="delI('${i.id}')" title="删除">✕</button></div><span class="idea-date">${i.date||''}</span></div>`).join('');
 }
 
 // ═══ Calendar Briefing ═══
-let _selBrief=null;
 function rCal(){
-  const grid=document.getElementById('calGrid'),keys=Object.keys(EMBED.briefing).sort((a,b)=>parseInt(b.split('-')[1])-parseInt(a.split('-')[1]));
+  const grid=document.getElementById('calGrid'),keys=Object.keys(DATA.briefing||{}).sort((a,b)=>parseInt(b.split('-')[1])-parseInt(a.split('-')[1]));
+  if(!keys.length){grid.innerHTML='<div class="meta">暂无简报</div>';return;}
   grid.innerHTML=keys.map(k=>{const d=k.split('-')[1];return`<div class="cal-day has-content" data-key="${k}" onclick="showBriefing('${k}')">${parseInt(d)}</div>`;}).join('');
-  if(keys.length){showBriefing(keys[0]);}
+  showBriefing(keys[0]);
 }
 function showBriefing(key){
-  const b=EMBED.briefing[key];if(!b)return;
+  const b=DATA.briefing[key];if(!b)return;
   document.querySelectorAll('.cal-day').forEach(d=>d.classList.remove('active'));
   const target=document.querySelector(`.cal-day[data-key="${key}"]`);
   if(target)target.classList.add('active');
   const el=document.getElementById('briefingDetail');
   el.innerHTML=`<h4>${_esc(b.title)}</h4><ul>${b.items.map(li=>'<li>'+_esc(li)+'</li>').join('')}</ul>${b.teaser?`<p class="teaser">${_esc(b.teaser)}</p>`:''}`;
-  el.classList.add('active');_selBrief=key;
 }
 
 // ═══ Papers: accordion ═══
 function fP(){
   const q=(document.getElementById('paperSearch')?.value||'').toLowerCase().trim(),el=document.getElementById('paperList');
-  let fl=EMBED.papers;if(q)fl=fl.filter(p=>(p.title||'').toLowerCase().includes(q)||(p.summary||'').toLowerCase().includes(q)||(p.tags||[]).some(t=>t.toLowerCase().includes(q)));
-  if(!fl.length){el.innerHTML=`<div class="meta" style="padding:16px 0;">${q?'没有匹配的论文':'论文数据库等待填入…'}</div>`;return;}
+  let fl=DATA.papers||[];if(q)fl=fl.filter(p=>(p.title||'').toLowerCase().includes(q)||(p.summary||'').toLowerCase().includes(q)||(p.tags||[]).some(t=>t.toLowerCase().includes(q)));
+  if(!fl.length){el.innerHTML=`<div class="meta" style="padding:16px 0;">${q?'没有匹配的论文':'论文数据库等待收录…'}</div>`;return;}
   el.innerHTML=fl.map((p,i)=>{const nk='pn_'+i;const note=localStorage.getItem(nk)||'';return`<div class="paper-row" onclick="this.classList.toggle('open')"><h4>${_esc(p.title)}</h4><div class="paper-body"><p>${_esc(p.summary)}</p><div class="paper-tags">${(p.tags||[]).map(t=>'<span>'+_esc(t)+'</span>').join('')}</div>${note?`<div class="paper-note" onclick="event.stopPropagation();editNote(this,'${nk}')">📝 ${_esc(note)}</div>`:`<div class="paper-note" onclick="event.stopPropagation();editNote(this,'${nk}')" style="color:#ccc;">+ 笔记</div>`}</div></div>`;}).join('');
 }
 function editNote(el,key){const cur=el.textContent.replace('📝 ','').replace('+ ','');const inp=document.createElement('input');inp.value=cur==='笔记'?'':cur;inp.style.cssText='width:100%;padding:4px 8px;border:1px solid var(--line);font-size:0.85rem;font-family:inherit;outline:none;border-radius:2px;margin-top:8px;';el.replaceWith(inp);inp.focus();inp.onblur=inp.onkeydown=function(e){if(e&&e.key!=='Enter')return;const v=inp.value.trim();if(v)localStorage.setItem(key,v);else localStorage.removeItem(key);fP();};}
 
 // ═══ Recs ═══
-function rR(){document.getElementById('recList').innerHTML=EMBED.recs.map(r=>`<div class="rec-item"><h4>${_esc(r.title)}</h4><div class="paper-tags" style="margin:8px 0">${(r.tags||[]).map(t=>'<span>'+_esc(t)+'</span>').join('')}</div><p class="why">${_esc(r.why)}</p></div>`).join('');}
+function rR(){
+  const el=document.getElementById('recList'),rs=DATA.recs||[];
+  if(!rs.length){el.innerHTML='<div class="meta" style="padding:16px 0;">推荐选题等待更新…</div>';return;}
+  el.innerHTML=rs.map(r=>`<div class="rec-item"><h4>${_esc(r.title)}</h4><div class="paper-tags" style="margin:8px 0">${(r.tags||[]).map(t=>'<span>'+_esc(t)+'</span>').join('')}</div><p class="why">${_esc(r.why)}</p></div>`).join('');
+}
 
 // ═══ Progress ═══
-let P=JSON.parse(localStorage.getItem('wf_p')||'null')||EMBED.progress.map(p=>({...p}));
+let P=JSON.parse(localStorage.getItem('wf_p')||'null')||[{label:'🧠 TMS 学习',current:4,total:8},{label:'📝 IELTS 备考',current:1,total:4},{label:'🚗 驾驶课',current:0,total:4}];
 function sP(){localStorage.setItem('wf_p',JSON.stringify(P));debounceSync();}
 function rP(){document.getElementById('progressList').innerHTML=P.map((p,i)=>`<div class="progress-row"><span class="progress-label">${_esc(p.label)}</span><div class="progress-track"><div class="progress-fill" style="width:${Math.round(p.current/p.total*100)}%"></div></div><span class="progress-num">${p.current}/${p.total}</span><span class="progress-edit" onclick="editP(${i})">✎</span></div>`).join('');}
 function editP(i){const p=P[i],el=document.getElementById('progressList').children[i];el.innerHTML=`<span class="progress-label">${_esc(p.label)}</span><input type="number" value="${p.current}" style="width:36px;text-align:right;border:1px solid var(--line);padding:2px 4px;font-size:0.8rem;font-family:inherit;" onchange="P[${i}].current=Math.max(0,parseInt(this.value)||0);P[${i}]._edited=true;sP();rP();"> <span style="font-size:0.8rem;color:var(--text-faint);">/ ${p.total}</span>`;el.querySelector('input').focus();el.querySelector('input').select();}
 
 // ═══ Concepts ═══
-function rC(){document.getElementById('conceptGrid').innerHTML=EMBED.concepts.map(c=>`<div class="concept-tag">${c.n}<span class="concept-tooltip">${c.d}</span></div>`).join('');}
+const CN=[{n:"MEP",d:"运动诱发电位——TMS刺激运动皮层后在靶肌肉记录到的电信号。"},{n:"皮质脊髓束",d:"从运动皮层到脊髓运动神经元的直接通路。"},{n:"LTP",d:"长时程增强——突触传递效率的持久增强。"},{n:"LTD",d:"长时程抑制——突触传递效率的持久减弱。"},{n:"SICI",d:"短间隔皮层内抑制——GABA_A介导。"},{n:"ICF",d:"皮层内易化——谷氨酸能兴奋性。"},{n:"TBS",d:"Theta爆发式刺激——iTBS增强、cTBS抑制。"},{n:"神经可塑性",d:"神经系统响应经验改变结构和功能的能力。"},{n:"筋膜CC点",d:"协调中心，意大利筋膜手法关键触诊点。"},{n:"AN-LU",d:"前向序列-上肢，筋膜手法运动序列。"},{n:"RE-LU",d:"后向序列-上肢，筋膜手法运动序列。"}];
+function rC(){document.getElementById('conceptGrid').innerHTML=CN.map(c=>`<div class="concept-tag">${c.n}<span class="concept-tooltip">${c.d}</span></div>`).join('');}
 
 function _esc(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 // ═══ Init ═══
-rFT();rI();rT();rCal();fP();rR();rP();rC();syncFromCloud();
+loadData();rT();rP();rC();syncFromCloud();
 setInterval(()=>syncFromCloud(),30000);
 </script>
 </body>
