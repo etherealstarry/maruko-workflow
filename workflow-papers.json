@@ -1,0 +1,18 @@
+{
+  "updated": "2026-05-05",
+  "papers": [
+    {"id":"p1","title":"Bidirectional plasticity induced by TUS in human motor cortex","summary":"经颅超声刺激可双向调控人运动皮层可塑性","tags":["TUS","plasticity","motor cortex"],"date":"2026-05-03","recommended":false},
+    {"id":"p2","title":"SICI with AP vs PA current direction — differential effects","summary":"不同电流方向对短间隔皮层内抑制的影响差异","tags":["SICI","TMS","cortical excitability"],"date":"2026-05-03","recommended":false},
+    {"id":"p3","title":"Accelerated TMS protocols for autism spectrum disorder","summary":"加速TMS方案在自闭症谱系障碍中的应用","tags":["TMS","autism","accelerated protocol"],"date":"2026-05-04","recommended":false},
+    {"id":"p4","title":"Motor learning and neuroplasticity: a review","summary":"运动学习与神经可塑性综述","tags":["motor learning","neuroplasticity","review"],"date":"2026-05-04","recommended":true},
+    {"id":"p5","title":"The role of SICI in motor skill acquisition","summary":"短间隔皮层内抑制在运动技能习得中的作用","tags":["SICI","motor learning","skill acquisition"],"date":"2026-05-04","recommended":true},
+    {"id":"p6","title":"Theta-burst stimulation: mechanisms and clinical applications","summary":"θ爆发刺激的机制与临床应用综述","tags":["TBS","TMS","clinical"],"date":"2026-05-04","recommended":false},
+    {"id":"p7","title":"Corticospinal excitability changes during motor imagery","summary":"运动想象过程中的皮质脊髓兴奋性变化","tags":["corticospinal","motor imagery","TMS"],"date":"2026-05-04","recommended":false},
+    {"id":"p8","title":"Paired associative stimulation and spike-timing-dependent plasticity","summary":"配对关联刺激与脉冲时间依赖可塑性","tags":["PAS","STDP","plasticity"],"date":"2026-05-03","recommended":false}
+  ],
+  "recommendations": [
+    {"id":"r1","title":"TMS与运动学习巩固（motor consolidation）的关系","why":"你学过SICI和MEP，但还没接触运动记忆巩固这个方向——这是运动学习与TMS的交叉核心","tags":["TMS","motor learning","consolidation"]},
+    {"id":"r2","title":"运动皮层映射的重组——TMS在神经康复中的应用","why":"你之前是康复治疗师，这个方向把你的临床背景和TMS研究完美结合","tags":["TMS","rehabilitation","cortical remapping"]},
+    {"id":"r3","title":"小脑在运动控制中的角色——TMS/TUS小脑刺激","why":"你的课程和实验设备都涉及运动控制，但小脑方向还没碰过——是个富矿区","tags":["cerebellum","motor control","TUS"]}
+  ]
+}
