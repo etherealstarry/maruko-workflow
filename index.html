@@ -35,6 +35,12 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 .del-btn, .edit-btn { opacity: 0; cursor: pointer; font-size: 0.75rem; color: var(--text-faint); border: none; background: none; padding: 2px 6px; transition: opacity 0.2s; }
 .del-btn:hover { color: #c44; } .edit-btn:hover { color: var(--text); }
 
+/* ── Filter tabs ── */
+.filter-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 16px; }
+.filter-tab { padding: 4px 12px; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); cursor: pointer; border: 1px solid transparent; transition: all 0.2s; }
+.filter-tab:hover { color: var(--text-soft); }
+.filter-tab.active { color: var(--text); border-color: var(--line); background: var(--bg-warm); }
+
 /* ── Ideas: compact, light ── */
 .idea-item { display: flex; align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .idea-item:hover .del-btn, .idea-item:hover .edit-btn { opacity: 1; }
@@ -142,7 +148,8 @@ h2 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-we
 
 <div class="card">
 <div class="card-label">灵感收件箱</div>
-<div class="help-text">Cola 从对话提取，hover 可 ✎ 修改 / ✕ 删除，底部自己加。</div>
+<div class="help-text">点击分类标签筛选。hover 可 ✎ 修改 / ✕ 删除，底部自己添加。</div>
+<div class="filter-tabs" id="filterTabs"></div>
 <div class="idea-list" id="ideaList"></div>
 <div class="add-idea">
 <select id="ideaCat"><option>TMS</option><option>IELTS</option><option>学习</option><option>筋膜</option><option>工具</option><option>生活</option><option>科研</option></select>
@@ -284,14 +291,20 @@ function rT(){
 
 // ═══ Ideas ═══
 let I=JSON.parse(localStorage.getItem('wf_i')||'null')||EMBED.ideas.map(i=>({...i,_edited:false}));
+let _ifilter='all';
 function sI(){localStorage.setItem('wf_i',JSON.stringify(I));debounceSync();}
 function addIdea(){const v=document.getElementById('ideaInput').value.trim(),ct=document.getElementById('ideaCat').value;if(!v)return;I.push({id:'u'+Date.now(),text:v,category:ct,date:new Date().toLocaleDateString('zh-CN',{month:'numeric',day:'numeric'}),_edited:true});document.getElementById('ideaInput').value='';sI();rI();}
 function delI(id){if(!confirm('删除？'))return;I=I.filter(i=>i.id!==id);sI();rI();}
 function editI(id,el){const i=I.find(x=>x.id===id);if(!i)return;const cur=el.querySelector('.idea-text'),inp=document.createElement('input');inp.value=i.text;inp.style.cssText='flex:1;font-size:0.9rem;padding:2px 0;background:white;border:none;border-bottom:1px solid var(--line);outline:none;font-family:inherit;color:var(--text-soft);';el.replaceChild(inp,cur);inp.focus();inp.select();inp.onblur=inp.onkeydown=function(e){if(e&&e.key!=='Enter')return;const v=inp.value.trim();if(v){i.text=v;i._edited=true;sI();}rI();};}
+function rFT(){
+  const cats=['all',...new Set(I.map(i=>i.category))];
+  document.getElementById('filterTabs').innerHTML=cats.map(c=>`<span class="filter-tab${_ifilter===c?' active':''}" onclick="_ifilter='${c}';rFT();rI();">${c==='all'?'全部':c}</span>`).join('');
+}
 function rI(){
   const el=document.getElementById('ideaList');
-  if(!I.length){el.innerHTML='<div class="meta" style="padding:8px 0;">还没有灵感～</div>';return;}
-  el.innerHTML=I.map(i=>`<div class="idea-item"><span class="idea-cat">${_esc(i.category)}</span><div class="idea-body"><span class="idea-text">${_esc(i.text)}</span><button class="edit-btn" onclick="editI('${i.id}',this.parentElement)" title="修改">✎</button><button class="del-btn" onclick="delI('${i.id}')" title="删除">✕</button></div><span class="idea-date">${i.date||''}</span></div>`).join('');
+  const fl=_ifilter==='all'?I:I.filter(i=>i.category===_ifilter);
+  if(!fl.length){el.innerHTML='<div class="meta" style="padding:8px 0;">这个分类下还没有灵感～</div>';return;}
+  el.innerHTML=fl.map(i=>`<div class="idea-item"><span class="idea-cat">${_esc(i.category)}</span><div class="idea-body"><span class="idea-text">${_esc(i.text)}</span><button class="edit-btn" onclick="editI('${i.id}',this.parentElement)" title="修改">✎</button><button class="del-btn" onclick="delI('${i.id}')" title="删除">✕</button></div><span class="idea-date">${i.date||''}</span></div>`).join('');
 }
 
 // ═══ Calendar Briefing ═══
@@ -334,7 +347,7 @@ function rC(){document.getElementById('conceptGrid').innerHTML=EMBED.concepts.ma
 function _esc(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 // ═══ Init ═══
-rI();rT();rCal();fP();rR();rP();rC();syncFromCloud();
+rFT();rI();rT();rCal();fP();rR();rP();rC();syncFromCloud();
 setInterval(()=>syncFromCloud(),30000);
 </script>
 </body>
