@@ -311,13 +311,14 @@ function rI(){
 let _selBrief=null;
 function rCal(){
   const grid=document.getElementById('calGrid'),keys=Object.keys(EMBED.briefing).sort((a,b)=>parseInt(b.split('-')[1])-parseInt(a.split('-')[1]));
-  grid.innerHTML=keys.map(k=>{const d=k.split('-')[1];return`<div class="cal-day has-content" onclick="showBriefing('${k}')">${parseInt(d)}</div>`;}).join('');
+  grid.innerHTML=keys.map(k=>{const d=k.split('-')[1];return`<div class="cal-day has-content" data-key="${k}" onclick="showBriefing('${k}')">${parseInt(d)}</div>`;}).join('');
   if(keys.length){showBriefing(keys[0]);}
 }
 function showBriefing(key){
   const b=EMBED.briefing[key];if(!b)return;
   document.querySelectorAll('.cal-day').forEach(d=>d.classList.remove('active'));
-  event.target.classList.add('active');
+  const target=document.querySelector(`.cal-day[data-key="${key}"]`);
+  if(target)target.classList.add('active');
   const el=document.getElementById('briefingDetail');
   el.innerHTML=`<h4>${_esc(b.title)}</h4><ul>${b.items.map(li=>'<li>'+_esc(li)+'</li>').join('')}</ul>${b.teaser?`<p class="teaser">${_esc(b.teaser)}</p>`:''}`;
   el.classList.add('active');_selBrief=key;
