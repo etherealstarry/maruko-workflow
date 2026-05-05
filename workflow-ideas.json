@@ -1,0 +1,15 @@
+{
+  "updated": "2026-05-05",
+  "ideas": [
+    {"id":"1","category":"TMS","text":"想做一个TMS实验设计模板","date":"2026-05-02"},
+    {"id":"2","category":"学习","text":"用48小时学习法预习统计课（STAT 608）","date":"2026-05-04"},
+    {"id":"3","category":"学习","text":"所有TAMU课程都按48小时法整理预习资源","date":"2026-05-04"},
+    {"id":"4","category":"生活","text":"做一个个人AI主页 / 个人网站","date":"2026-05-05"},
+    {"id":"5","category":"生活","text":"人生养成游戏积分系统 — 像小红书那个","date":"2026-05-04"},
+    {"id":"6","category":"学习","text":"搭一个工作流网页来清空大脑","date":"2026-05-05"},
+    {"id":"7","category":"IELTS","text":"IELTS Task 1 intro paraphrase 练习","date":"2026-04-26"},
+    {"id":"8","category":"TMS","text":"cTBS实验设计题还没做","date":"2026-05-02"},
+    {"id":"9","category":"学习","text":"学习如何读论文、写论文、做科研","date":"2026-05-01"},
+    {"id":"10","category":"生活","text":"想要桌面整理 + 存储清理 + 内存优化","date":"2026-05-05"}
+  ]
+}
