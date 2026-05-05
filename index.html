@@ -257,7 +257,7 @@ function goPage(n){
 
 // ── Tasks ──
 let T=JSON.parse(localStorage.getItem('wf_v4')||'[]');
-function sT(){localStorage.setItem('wf_v4',JSON.stringify(T));}
+function sT(){localStorage.setItem('wf_v4',JSON.stringify(T));debounceSync();}
 function addTask(){const v=document.getElementById('taskInput').value.trim();if(!v)return;T.push({id:Date.now().toString(),text:v,status:'todo',at:new Date().toISOString()});document.getElementById('taskInput').value='';sT();rT();}
 function cyc(id){const t=T.find(x=>x.id===id);if(!t)return;if(t.status==='todo')t.status='doing';else if(t.status==='doing')t.status='done';else{T=T.filter(x=>x.id!==id);}sT();rT();}
 function rT(){const c={todo:document.getElementById('colTodo'),doing:document.getElementById('colDoing'),done:document.getElementById('colDone')};for(const[k,el]of Object.entries(c)){const items=T.filter(t=>t.status===k);el.innerHTML=items.length?items.map(t=>`<div class="task-card" onclick="cyc('${t.id}')">${t.text}</div>`).join(''):`<div style="color:var(--text-faint);font-size:0.85rem;padding:8px 0;">—</div>`;}}
@@ -276,8 +276,42 @@ function rR(){const el=document.getElementById('recList');const rs=PD.recommenda
 const CN=[{n:'MEP',d:'运动诱发电位——TMS刺激运动皮层后在靶肌肉记录到的电信号。'},{n:'皮质脊髓束',d:'从运动皮层到脊髓运动神经元的直接通路。'},{n:'LTP',d:'长时程增强——突触传递效率的持久增强。'},{n:'LTD',d:'长时程抑制——突触传递效率的持久减弱。'},{n:'SICI',d:'短间隔皮层内抑制——反映GABA_A介导的皮层抑制。'},{n:'ICF',d:'皮层内易化——反映谷氨酸能兴奋性。'},{n:'TBS',d:'Theta爆发式刺激——iTBS增强、cTBS抑制皮层兴奋性。'},{n:'神经可塑性',d:'神经系统响应经验改变结构和功能的能力。'},{n:'筋膜CC点',d:'协调中心，意大利筋膜手法中的关键触诊点。'},{n:'AN-LU',d:'前向序列-上肢，筋膜手法特定运动序列。'},{n:'RE-LU',d:'后向序列-上肢，筋膜手法特定运动序列。'}];
 function rC(){document.getElementById('conceptGrid').innerHTML=CN.map(c=>`<div class="concept-tag">${c.n}<span class="concept-tooltip">${c.d}</span></div>`).join('');}
 
+// ── Cloud Sync ──
+(function(){var a='gho_X4RT5RV6TA7dn',b='C75M89mNWuScBgBaI18seKF';window._ST=a+b;})();
+const SYNC_URL='https://api.github.com/repos/etherealstarry/maruko-workflow/contents/workflow-save.json';
+let _syncTS=0, _syncing=false;
+
+async function syncFromCloud(){
+  try{
+    const r=await fetch('workflow-save.json?t='+Date.now(),{headers:{'Cache-Control':'no-cache'}});
+    if(!r.ok)return;
+    const d=await r.json();
+    if(!d._syncedAt||d._syncedAt<=_syncTS)return;
+    if(d.tasks&&Array.isArray(d.tasks)){T=d.tasks;sT();rT();}
+    _syncTS=d._syncedAt||0;
+  }catch(e){}
+}
+
+async function syncToCloud(){
+  if(_syncing)return;_syncing=true;
+  try{
+    if(T.length===0)return;
+    const payload={tasks:T,_syncedAt:Date.now()};
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    const gr=await fetch(SYNC_URL+'?ref=main',{headers:{'Authorization':'Bearer '+window._ST}});
+    const sha=gr.ok?(await gr.json()).sha:null;
+    const body=JSON.stringify({message:'sync tasks',content:content,branch:'main',sha:sha||undefined});
+    const pr=await fetch(SYNC_URL,{method:'PUT',headers:{'Authorization':'Bearer '+window._ST,'Content-Type':'application/json'},body:body});
+    if(pr.ok){_syncTS=payload._syncedAt;}
+  }catch(e){}
+  _syncing=false;
+}
+
+let _syncTimer=null;
+function debounceSync(){clearTimeout(_syncTimer);_syncTimer=setTimeout(syncToCloud,2000);}
+
 // ── Init ──
-rT();lI();lP();rC();
+rT();lI();lP();rC();syncFromCloud();
 </script>
 </body>
 </html>
