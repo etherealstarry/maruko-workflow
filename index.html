@@ -51,31 +51,31 @@ h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif SC', serif; font-style
 
 /* ── Cards ── */
 .card { background: var(--white); padding: 36px; border: 1px solid var(--line); margin-bottom: 2px; }
-.card-label { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 24px; }
+.card-label { font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 24px; }
 
 /* ── Ideas ── */
 .idea-item { display: flex; align-items: baseline; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); transition: padding-left 0.3s; }
 .idea-item:hover { padding-left: 10px; }
-.idea-cat { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); min-width: 52px; font-weight: 400; }
-.idea-text { font-size: 1rem; flex: 1; line-height: 1.7; }
-.idea-date { font-size: 0.75rem; color: var(--text-faint); white-space: nowrap; }
+.idea-cat { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); min-width: 52px; font-weight: 400; }
+.idea-text { font-size: 1.1rem; flex: 1; line-height: 1.75; letter-spacing: 0.01em; }
+.idea-date { font-size: 0.78rem; color: var(--text-faint); white-space: nowrap; }
 
 /* ── Tasks ── */
 .task-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
 .task-col { background: var(--bg-warm); padding: 24px 18px; }
-.col-tag { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.col-tag { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .col-tag.todo { color: var(--text-faint); }
 .col-tag.doing { color: var(--text-soft); }
 .col-tag.done { color: var(--text-faint); }
 
-.task-card { background: var(--white); padding: 14px 16px; margin-bottom: 8px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+.task-card { background: var(--white); padding: 14px 16px; margin-bottom: 8px; font-size: 1rem; letter-spacing: 0.01em; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
 .col-todo .task-card { border-left: 2px solid #D4C5B5; }
 .col-doing .task-card { border-left: 2px solid #B8A99A; }
 .col-done .task-card { border-left: 2px solid #E0D8D0; text-decoration: line-through; color: var(--text-faint); }
 .task-card:hover { border-color: var(--line); transform: translateX(2px); }
 
 .add-task { display: flex; gap: 6px; margin-top: 14px; }
-.add-task input { flex:1; padding: 12px 14px; border: 1px solid var(--line); background: var(--white); font-size: 0.9rem; outline: none; font-family: inherit; transition: border-color 0.2s; }
+.add-task input { flex:1; padding: 12px 14px; border: 1px solid var(--line); background: var(--white); font-size: 1rem; letter-spacing: 0.01em; outline: none; font-family: inherit; transition: border-color 0.2s; }
 .add-task input:focus { border-color: var(--accent); }
 .add-task button { padding: 12px 18px; background: var(--text); color: white; border: none; font-size: 0.9rem; cursor: pointer; font-family: inherit; }
 
@@ -87,33 +87,33 @@ h2 { font-family: Georgia, 'Times New Roman', 'Noto Serif SC', serif; font-style
 /* ── Papers ── */
 .paper-item { padding: 24px 0; border-bottom: 1px solid var(--line); transition: padding-left 0.3s; }
 .paper-item:hover { padding-left: 10px; }
-.paper-item h4 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 1.1rem; font-weight: 400; margin-bottom: 6px; }
-.paper-item p { font-size: 0.9rem; color: var(--text-soft); line-height: 1.7; }
+.paper-item h4 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 1.25rem; font-weight: 400; margin-bottom: 6px; }
+.paper-item p { font-size: 1rem; color: var(--text-soft); line-height: 1.75; letter-spacing: 0.01em; }
 .paper-tags { display: flex; gap: 16px; margin-top: 10px; }
 .paper-tags span { font-size: 0.7rem; color: var(--text-faint); letter-spacing: 0.05em; }
 
 /* ── Recommendations ── */
 .rec-item { padding: 28px; border: 1px solid var(--line); margin-bottom: 2px; transition: padding-left 0.3s; }
 .rec-item:hover { padding-left: 38px; }
-.rec-item h4 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 1.05rem; font-weight: 400; margin-bottom: 8px; }
-.rec-item .why { font-size: 0.95rem; color: var(--text-soft); font-style: italic; line-height: 1.7; }
+.rec-item h4 { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 1.15rem; font-weight: 400; margin-bottom: 8px; }
+.rec-item .why { font-size: 1rem; color: var(--text-soft); font-style: italic; line-height: 1.75; letter-spacing: 0.01em; }
 
 /* ── Progress ── */
 .progress-row { display: flex; align-items: center; gap: 20px; padding: 16px 0; }
-.progress-label { font-size: 0.95rem; width: 130px; flex-shrink: 0; }
+.progress-label { font-size: 1.05rem; letter-spacing: 0.01em; width: 130px; flex-shrink: 0; }
 .progress-track { flex:1; height: 3px; background: var(--line); }
 .progress-fill { height: 100%; background: var(--text); transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
 .progress-num { font-size: 0.8rem; color: var(--text-faint); width: 36px; text-align: right; }
 
 /* ── Concepts ── */
 .concept-grid { display: flex; flex-wrap: wrap; gap: 2px; }
-.concept-tag { padding: 10px 20px; font-size: 0.85rem; cursor: pointer; background: var(--bg-warm); transition: background 0.2s; position: relative; border: 1px solid transparent; }
+.concept-tag { padding: 10px 20px; font-size: 0.95rem; letter-spacing: 0.01em; cursor: pointer; background: var(--bg-warm); transition: background 0.2s; position: relative; border: 1px solid transparent; }
 .concept-tag:hover { background: var(--text); color: white; border-color: var(--text); }
 .concept-tooltip { display: none; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 12px 18px; font-size: 0.78rem; white-space: nowrap; max-width: 280px; z-index: 10; }
 .concept-tag:hover .concept-tooltip { display: block; }
 
 /* ── Resources ── */
-.res-link { display: flex; align-items: center; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--text); font-size: 0.95rem; transition: padding-left 0.3s; }
+.res-link { display: flex; align-items: center; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--text); font-size: 1.05rem; letter-spacing: 0.01em; transition: padding-left 0.3s; }
 .res-link:hover { padding-left: 10px; }
 
 /* ── Page Jump Buttons ── */
