@@ -3,530 +3,411 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>丸子工作流</title>
+<title>丸子 · 工作流</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #FEF9F3;
-  --pink: #E892A8;
-  --pink-light: #F7D0D5;
-  --pink-bg: #FDF2F4;
-  --text: #4A3535;
-  --text-light: #8B7B7B;
+  --bg: #FAFAF8;
+  --bg-warm: #F5F2EE;
+  --text: #1A1A1A;
+  --text-soft: #6B6B6B;
+  --text-faint: #A0A0A0;
+  --line: #E8E4DF;
+  --accent: #B8A99A;
   --white: #FFFFFF;
-  --shadow: 0 4px 20px rgba(0,0,0,0.06);
-  --amber: #F0A060;
-  --blue: #7BADD0;
-  --green: #8CB896;
-  --radius: 14px;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  background-image: radial-gradient(circle, rgba(232,146,168,0.10) 1px, transparent 1px);
-  background-size: 40px 40px;
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', sans-serif;
+  background: var(--bg); color: var(--text);
+  font-weight: 300; line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
 }
 
-.container { width: 100%; max-width: 680px; padding: 40px 20px 100px; }
-
-/* ── Page Navigation ── */
-.pages { position: relative; min-height: 400px; }
-.page {
-  display: none; flex-direction: column; gap: 28px;
-  animation: fadeSlideIn 0.4s ease;
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+
+.serif { font-family: 'Playfair Display', Georgia, serif; }
+.serif-i { font-family: 'Playfair Display', Georgia, serif; font-style: italic; }
+
+.container { width: 100%; max-width: 680px; padding: 48px 24px 120px; }
+
+/* ── Pages ── */
+.page { display: none; flex-direction: column; gap: 36px; animation: fadeIn 0.5s cubic-bezier(0.16,1,0.3,1); }
 .page.active { display: flex; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
 
-@keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ── Page header ── */
+.page-header { margin-bottom: 4px; }
+.page-header .num {
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-faint); margin-bottom: 8px;
 }
-
-/* ── Page Header ── */
-.page-header { text-align: center; padding-bottom: 8px; }
-.page-header .icon { font-size: 42px; margin-bottom: 8px; }
-.page-header h2 { font-size: 1.4rem; font-weight: 600; color: #3A2A2A; }
-.page-header p { font-size: 0.85rem; color: var(--text-light); margin-top: 4px; }
+.page-header h2 { font-size: 1.8rem; font-weight: 600; font-style: italic; }
+.page-header p { font-size: 0.85rem; color: var(--text-soft); margin-top: 4px; }
 
 /* ── Cards ── */
-.card {
-  background: var(--white); border-radius: var(--radius);
-  padding: 20px; box-shadow: var(--shadow);
+.card { background: var(--white); padding: 28px; border: 1px solid var(--line); }
+.card-label {
+  font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-faint); margin-bottom: 20px;
 }
-.card-header { font-size: 0.9rem; font-weight: 600; color: var(--pink); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 
-/* ── Idea Cards (Tab 1) ── */
-.idea-list { display: flex; flex-direction: column; gap: 10px; }
-.idea-card {
-  background: var(--white); border-radius: 10px; padding: 14px 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; align-items: flex-start; gap: 12px;
-  transition: transform 0.2s;
+/* ── Ideas ── */
+.idea-list { display: flex; flex-direction: column; gap: 2px; }
+.idea-item {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 14px 0; border-bottom: 1px solid var(--line);
+  transition: padding-left 0.25s;
 }
-.idea-card:hover { transform: translateY(-1px); }
-.idea-badge {
-  padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;
-  flex-shrink: 0; white-space: nowrap;
+.idea-item:hover { padding-left: 8px; }
+.idea-cat {
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-faint); min-width: 48px;
 }
-.badge-tms { background: #FFF3E0; color: #E65100; }
-.badge-ielts { background: #E8F5E9; color: #2E7D32; }
-.badge-学习 { background: #E3F2FD; color: #1565C0; }
-.badge-生活 { background: #FCE4EC; color: #C62828; }
-.idea-text { font-size: 0.9rem; line-height: 1.5; flex: 1; }
-.idea-date { font-size: 0.7rem; color: var(--text-light); flex-shrink: 0; }
+.idea-text { font-size: 0.9rem; flex: 1; line-height: 1.5; }
+.idea-date { font-size: 0.7rem; color: var(--text-faint); white-space: nowrap; }
 
-/* ── Task Columns (Tab 1 bottom) ── */
-.task-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-.task-col { display: flex; flex-direction: column; gap: 10px; }
-.task-col-title {
-  font-size: 0.78rem; font-weight: 600; padding: 8px 0;
-  text-align: center; border-radius: 8px;
+/* ── Tasks ── */
+.task-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+.task-col { background: var(--bg-warm); padding: 20px 16px; }
+.col-tag {
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line);
 }
-.col-todo .task-col-title { background: #FFF8E1; color: #E67E00; }
-.col-doing .task-col-title { background: #E3F2FD; color: #2962A5; }
-.col-done .task-col-title { background: #E8F5E9; color: #2E7D32; }
+.col-tag.todo { color: var(--text-faint); }
+.col-tag.doing { color: var(--text-soft); }
+.col-tag.done { color: var(--text-faint); }
 
 .task-card {
-  background: var(--white); border-radius: 10px; padding: 12px 14px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04); font-size: 0.85rem;
-  cursor: pointer; transition: all 0.2s; position: relative;
-  border-left: 3px solid transparent;
+  background: var(--white); padding: 12px 14px; margin-bottom: 8px;
+  font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
+  border: 1px solid transparent;
 }
-.col-todo .task-card { border-left-color: var(--amber); }
-.col-doing .task-card { border-left-color: var(--blue); }
-.col-done .task-card { border-left-color: var(--green); text-decoration: line-through; color: var(--text-light); }
-.task-card:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+.col-todo .task-card { border-left: 2px solid #D4C5B5; }
+.col-doing .task-card { border-left: 2px solid #B8A99A; }
+.col-done .task-card { border-left: 2px solid #E0D8D0; text-decoration: line-through; color: var(--text-faint); }
+.task-card:hover { border-color: var(--line); }
 
-.add-task {
-  display: flex; gap: 8px; margin-top: 4px;
-}
+.add-task { display: flex; gap: 6px; margin-top: 12px; }
 .add-task input {
-  flex: 1; padding: 10px 14px; border: 2px dashed var(--pink-light);
-  border-radius: 10px; background: transparent; font-size: 0.85rem; outline: none;
-  font-family: inherit; transition: border-color 0.2s;
+  flex: 1; padding: 10px 12px; border: 1px solid var(--line); background: var(--white);
+  font-size: 0.8rem; outline: none; font-family: inherit; transition: border-color 0.2s;
 }
-.add-task input:focus { border-color: var(--pink); }
+.add-task input:focus { border-color: var(--accent); }
 .add-task button {
-  padding: 10px 16px; background: var(--pink); color: white; border: none;
-  border-radius: 10px; font-size: 0.85rem; cursor: pointer; font-weight: 600;
-  transition: background 0.2s;
+  padding: 10px 16px; background: var(--text); color: white; border: none;
+  font-size: 0.8rem; cursor: pointer; font-family: inherit;
+  transition: opacity 0.2s;
 }
-.add-task button:hover { background: #d47a90; }
+.add-task button:hover { opacity: 0.8; }
 
-.empty-hint { color: var(--text-light); font-size: 0.8rem; text-align: center; padding: 16px 0; }
-
-/* ── Paper Search (Tab 2) ── */
-.search-box {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--white); border-radius: var(--radius); padding: 14px 18px;
-  box-shadow: var(--shadow); margin-bottom: 16px;
+/* ── Search ── */
+.search-wrap {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--white); padding: 16px 20px; border: 1px solid var(--line);
 }
-.search-box input {
-  flex: 1; border: none; outline: none; font-size: 0.95rem; font-family: inherit;
+.search-wrap input {
+  flex: 1; border: none; outline: none; font-size: 0.9rem; font-family: inherit;
   color: var(--text);
 }
-.search-box input::placeholder { color: #C0B0B0; }
-.search-icon { font-size: 1.2rem; }
+.search-wrap input::placeholder { color: var(--text-faint); }
 
-.paper-list { display: flex; flex-direction: column; gap: 10px; }
-.paper-card {
-  background: var(--white); border-radius: 10px; padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.2s;
-  border-left: 3px solid var(--pink-light);
+/* ── Papers ── */
+.paper-list { display: flex; flex-direction: column; gap: 2px; }
+.paper-item {
+  padding: 20px 0; border-bottom: 1px solid var(--line);
+  transition: padding-left 0.25s;
 }
-.paper-card:hover { transform: translateY(-1px); }
-.paper-card h4 { font-size: 0.9rem; margin-bottom: 6px; color: #3A2A2A; }
-.paper-card p { font-size: 0.8rem; color: var(--text-light); line-height: 1.5; }
-.paper-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-.paper-tag {
-  padding: 2px 10px; border-radius: 10px; font-size: 0.7rem;
-  background: var(--pink-bg); color: var(--pink);
-}
+.paper-item:hover { padding-left: 8px; }
+.paper-item h4 { font-size: 0.9rem; font-weight: 600; font-style: italic; margin-bottom: 4px; }
+.paper-item p { font-size: 0.8rem; color: var(--text-soft); }
+.paper-tags { display: flex; gap: 12px; margin-top: 8px; }
+.paper-tags span { font-size: 0.65rem; color: var(--text-faint); letter-spacing: 0.05em; }
 
-/* ── Recommendations (Tab 2 bottom) ── */
-.rec-card {
-  background: linear-gradient(135deg, #FDF2F4, #FFF8F3);
-  border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow);
-  border: 1px solid var(--pink-light);
+/* ── Recommendations ── */
+.rec-item {
+  padding: 24px; border: 1px solid var(--line);
+  margin-bottom: 2px; transition: padding-left 0.25s;
 }
-.rec-card h4 { font-size: 0.9rem; margin-bottom: 6px; }
-.rec-card .rec-why { font-size: 0.8rem; color: var(--text-light); line-height: 1.5; font-style: italic; }
+.rec-item:hover { padding-left: 32px; }
+.rec-item h4 { font-size: 0.95rem; font-weight: 600; font-style: italic; margin-bottom: 6px; }
+.rec-item .why { font-size: 0.8rem; color: var(--text-soft); font-style: italic; }
 
-/* ── Progress Bars (Tab 3) ── */
-.progress-list { display: flex; flex-direction: column; gap: 16px; }
-.progress-item { display: flex; align-items: center; gap: 14px; }
-.progress-label { font-size: 0.85rem; width: 100px; flex-shrink: 0; }
-.progress-bar-wrap {
-  flex: 1; height: 10px; background: #F0E8E8; border-radius: 10px; overflow: hidden;
+/* ── Progress ── */
+.progress-row {
+  display: flex; align-items: center; gap: 16px; padding: 12px 0;
 }
-.progress-bar-fill { height: 100%; background: var(--pink); border-radius: 10px; transition: width 0.6s ease; }
-.progress-num { font-size: 0.8rem; color: var(--text-light); width: 40px; text-align: right; }
+.progress-label { font-size: 0.85rem; width: 120px; flex-shrink: 0; }
+.progress-track { flex: 1; height: 2px; background: var(--line); }
+.progress-fill { height: 100%; background: var(--text); transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+.progress-num { font-size: 0.75rem; color: var(--text-faint); width: 32px; text-align: right; }
 
-/* ── Concept Tags (Tab 3) ── */
-.concept-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+/* ── Concepts ── */
+.concept-grid { display: flex; flex-wrap: wrap; gap: 2px; }
 .concept-tag {
-  padding: 8px 16px; border-radius: 20px; font-size: 0.8rem;
-  background: var(--pink-bg); color: var(--pink); cursor: pointer;
-  transition: all 0.2s; border: 1.5px solid transparent; position: relative;
+  padding: 8px 16px; font-size: 0.78rem; cursor: pointer;
+  background: var(--bg-warm); transition: background 0.2s; position: relative;
+  border: 1px solid transparent;
 }
-.concept-tag:hover { background: var(--pink); color: white; }
+.concept-tag:hover { background: var(--text); color: white; border-color: var(--text); }
 .concept-tooltip {
   display: none; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
-  background: #3A2A2A; color: white; padding: 8px 14px; border-radius: 8px;
-  font-size: 0.75rem; white-space: nowrap; max-width: 240px; z-index: 10;
+  background: var(--text); color: white; padding: 10px 16px; font-size: 0.72rem;
+  white-space: nowrap; max-width: 260px; z-index: 10;
+  font-family: 'Inter', -apple-system, sans-serif; font-style: normal;
 }
 .concept-tag:hover .concept-tooltip { display: block; }
 
-/* ── Resource Links (Tab 3) ── */
-.resource-list { display: flex; flex-direction: column; gap: 8px; }
-.resource-link {
-  display: flex; align-items: center; gap: 10px; padding: 14px 16px;
-  background: var(--white); border-radius: 10px; text-decoration: none; color: var(--text);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: transform 0.2s;
+/* ── Resources ── */
+.res-link {
+  display: flex; align-items: center; gap: 12px; padding: 16px 0;
+  border-bottom: 1px solid var(--line); text-decoration: none; color: var(--text);
+  font-size: 0.85rem; transition: padding-left 0.25s;
 }
-.resource-link:hover { transform: translateY(-1px); }
-.resource-link .link-emoji { font-size: 1.3rem; }
+.res-link:hover { padding-left: 8px; }
 
 /* ── Bottom Nav ── */
 .bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0; background: rgba(254,249,243,0.95);
-  backdrop-filter: blur(12px); border-top: 1px solid #F0E8E8;
-  display: flex; justify-content: center; align-items: center; gap: 20px;
-  padding: 14px 20px; z-index: 100;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: center; align-items: center; gap: 32px;
+  padding: 16px 24px; background: rgba(250,250,248,0.92);
+  backdrop-filter: blur(16px); border-top: 1px solid var(--line); z-index: 100;
 }
 .nav-btn {
-  padding: 10px 24px; border-radius: 24px; border: none;
-  font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit;
-  transition: all 0.2s;
+  background: none; border: none; font-size: 0.78rem; cursor: pointer;
+  font-family: 'Inter', -apple-system, sans-serif; letter-spacing: 0.05em;
+  color: var(--text-soft); transition: color 0.2s;
 }
-.nav-btn.prev { background: transparent; color: var(--text-light); }
-.nav-btn.next { background: var(--pink); color: white; }
-.nav-btn:disabled { opacity: 0.3; cursor: default; }
-.nav-dots { display: flex; gap: 6px; }
-.nav-dot {
-  width: 8px; height: 8px; border-radius: 50%; background: #E0D5D5;
-  transition: all 0.3s;
-}
-.nav-dot.active { background: var(--pink); width: 24px; border-radius: 10px; }
+.nav-btn:hover { color: var(--text); }
+.nav-btn:disabled { color: var(--text-faint); cursor: default; }
+.nav-dots { display: flex; gap: 8px; }
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--line); transition: all 0.3s; }
+.nav-dot.active { background: var(--text); width: 20px; border-radius: 6px; }
 
-/* ── Responsive ── */
+/* ── Mobile ── */
 @media (max-width: 480px) {
-  .container { padding: 24px 16px 100px; }
+  .container { padding: 32px 16px 120px; }
   .task-grid { grid-template-columns: 1fr; }
-  .progress-item { flex-wrap: wrap; }
-  .progress-label { width: 80px; }
+  .progress-row { flex-wrap: wrap; }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="pages">
 
-    <!-- ═══════ PAGE 1: 灵感 + 日清单 ═══════ -->
-    <div class="page active" data-page="0">
-      <div class="page-header">
-        <div class="icon">💡</div>
-        <h2>灵感收件箱</h2>
-        <p>从聊天中自动提炼的想法 & 日常任务看板</p>
-      </div>
+  <!-- ═══════ PAGE 1 ═══════ -->
+  <div class="page active" data-page="0">
+    <div class="page-header">
+      <div class="num">01 / 03</div>
+      <h2 class="serif-i">Inbox</h2>
+      <p>灵感收件箱 &amp; 今日清单</p>
+    </div>
 
-      <div class="card">
-        <div class="card-header">✨ 最近灵感</div>
-        <div class="idea-list" id="ideaList">
-          <div class="empty-hint">加载中…</div>
+    <div class="card">
+      <div class="card-label">最近灵感</div>
+      <div class="idea-list" id="ideaList"><div style="color:var(--text-faint);font-size:0.8rem;">加载中…</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">今日清单</div>
+      <div class="task-grid">
+        <div class="task-col">
+          <div class="col-tag todo">待办</div>
+          <div id="colTodo"></div>
+          <div class="add-task">
+            <input id="taskInput" placeholder="添加任务…" onkeydown="if(event.key==='Enter')addTask()">
+            <button onclick="addTask()">+</button>
+          </div>
         </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">📋 今日清单</div>
-        <div class="task-grid" id="taskGrid">
-          <div class="task-col col-todo">
-            <div class="task-col-title">待办</div>
-            <div id="colTodo"></div>
-            <div class="add-task">
-              <input id="taskInput" placeholder="添加新任务…" onkeydown="if(event.key==='Enter')addTask()">
-              <button onclick="addTask()">+</button>
-            </div>
-          </div>
-          <div class="task-col col-doing">
-            <div class="task-col-title">进行中</div>
-            <div id="colDoing"></div>
-          </div>
-          <div class="task-col col-done">
-            <div class="task-col-title">完成</div>
-            <div id="colDone"></div>
-          </div>
+        <div class="task-col">
+          <div class="col-tag doing">进行中</div>
+          <div id="colDoing"></div>
+        </div>
+        <div class="task-col">
+          <div class="col-tag done">完成</div>
+          <div id="colDone"></div>
         </div>
       </div>
     </div>
-
-    <!-- ═══════ PAGE 2: 论文选题 ═══════ -->
-    <div class="page" data-page="1">
-      <div class="page-header">
-        <div class="icon">🔬</div>
-        <h2>论文选题工坊</h2>
-        <p>搜索研究方向 & 每日灵感推荐</p>
-      </div>
-
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input id="paperSearch" placeholder="输入关键词，搜研究方向…" oninput="filterPapers()">
-      </div>
-
-      <div class="card">
-        <div class="card-header">📄 论文</div>
-        <div class="paper-list" id="paperList">
-          <div class="empty-hint">输入关键词开始搜索…</div>
-        </div>
-      </div>
-
-      <div class="card" style="background: transparent; box-shadow: none; padding: 0;">
-        <div class="card-header">🎯 每日推荐</div>
-        <div id="recList" style="display:flex;flex-direction:column;gap:12px;"></div>
-      </div>
-    </div>
-
-    <!-- ═══════ PAGE 3: 学习仪表盘 ═══════ -->
-    <div class="page" data-page="2">
-      <div class="page-header">
-        <div class="icon">📊</div>
-        <h2>学习仪表盘</h2>
-        <p>进度追踪 & 知识回顾</p>
-      </div>
-
-      <div class="card">
-        <div class="card-header">📈 学习进度</div>
-        <div class="progress-list">
-          <div class="progress-item">
-            <span class="progress-label">🧠 TMS 学习</span>
-            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:50%"></div></div>
-            <span class="progress-num">4/8</span>
-          </div>
-          <div class="progress-item">
-            <span class="progress-label">📝 IELTS 备考</span>
-            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:25%"></div></div>
-            <span class="progress-num">1/4</span>
-          </div>
-          <div class="progress-item">
-            <span class="progress-label">🚗 驾驶课</span>
-            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:0%"></div></div>
-            <span class="progress-num">0/4</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">📚 已学概念</div>
-        <div class="concept-grid" id="conceptGrid"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">📖 学习资料</div>
-        <div class="resource-list">
-          <a href="#" class="resource-link"><span class="link-emoji">📦</span> TMS 课程预习资源包</a>
-          <a href="#" class="resource-link"><span class="link-emoji">📘</span> 筋膜手法疾痛菜谱</a>
-          <a href="#" class="resource-link"><span class="link-emoji">📄</span> 运动控制综述论文库</a>
-        </div>
-      </div>
-    </div>
-
   </div>
+
+  <!-- ═══════ PAGE 2 ═══════ -->
+  <div class="page" data-page="1">
+    <div class="page-header">
+      <div class="num">02 / 03</div>
+      <h2 class="serif-i">Research</h2>
+      <p>论文选题工坊 &amp; 每日推荐</p>
+    </div>
+
+    <div class="search-wrap">
+      <span style="font-size:1.1rem;">🔍</span>
+      <input id="paperSearch" placeholder="输入关键词，搜索研究方向…" oninput="filterPapers()">
+    </div>
+
+    <div class="card">
+      <div class="card-label">论文</div>
+      <div class="paper-list" id="paperList"><div style="color:var(--text-faint);font-size:0.8rem;">输入关键词开始搜索…</div></div>
+    </div>
+
+    <div style="margin-top:4px;">
+      <div class="card-label" style="margin-bottom:12px;">每日推荐</div>
+      <div id="recList"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ PAGE 3 ═══════ -->
+  <div class="page" data-page="2">
+    <div class="page-header">
+      <div class="num">03 / 03</div>
+      <h2 class="serif-i">Progress</h2>
+      <p>学习仪表盘 &amp; 知识回顾</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">学习进度</div>
+      <div class="progress-row">
+        <span class="progress-label">🧠 TMS 学习</span>
+        <div class="progress-track"><div class="progress-fill" style="width:50%"></div></div>
+        <span class="progress-num">4/8</span>
+      </div>
+      <div class="progress-row">
+        <span class="progress-label">📝 IELTS 备考</span>
+        <div class="progress-track"><div class="progress-fill" style="width:25%"></div></div>
+        <span class="progress-num">1/4</span>
+      </div>
+      <div class="progress-row">
+        <span class="progress-label">🚗 驾驶课</span>
+        <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+        <span class="progress-num">0/4</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">已学概念</div>
+      <div class="concept-grid" id="conceptGrid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">学习资料</div>
+      <a href="#" class="res-link">📦 TMS 课程预习资源包</a>
+      <a href="#" class="res-link">📘 筋膜手法疾痛菜谱</a>
+      <a href="#" class="res-link">📄 运动控制综述论文库</a>
+    </div>
+  </div>
+
 </div>
 
-<!-- Bottom Navigation -->
+<!-- Bottom Nav -->
 <nav class="bottom-nav">
-  <button class="nav-btn prev" id="btnPrev" onclick="goPage(-1)" disabled>← 上一页</button>
+  <button class="nav-btn" id="btnPrev" onclick="goPage(-1)" disabled>← Prev</button>
   <div class="nav-dots" id="navDots">
-    <span class="nav-dot active"></span>
-    <span class="nav-dot"></span>
-    <span class="nav-dot"></span>
+    <span class="nav-dot active"></span><span class="nav-dot"></span><span class="nav-dot"></span>
   </div>
-  <button class="nav-btn next" id="btnNext" onclick="goPage(1)">下一页 →</button>
+  <button class="nav-btn" id="btnNext" onclick="goPage(1)">Next →</button>
 </nav>
 
 <script>
-// ═══════ PAGE NAVIGATION ═══════
-let currentPage = 0; const totalPages = 3;
-const pages = document.querySelectorAll('.page');
-const dots = document.querySelectorAll('.nav-dot');
-const btnPrev = document.getElementById('btnPrev');
-const btnNext = document.getElementById('btnNext');
-
-function goPage(dir) {
-  const next = currentPage + dir;
-  if (next < 0 || next >= totalPages) return;
-  pages[currentPage].classList.remove('active');
-  dots[currentPage].classList.remove('active');
-  currentPage = next;
-  pages[currentPage].classList.add('active');
-  dots[currentPage].classList.add('active');
-  btnPrev.disabled = currentPage === 0;
-  btnNext.disabled = currentPage === totalPages - 1;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+// ── Page nav ──
+let cp=0; const TP=3;
+function goPage(d){
+  const n=cp+d; if(n<0||n>=TP)return;
+  document.querySelectorAll('.page')[cp].classList.remove('active');
+  document.querySelectorAll('.nav-dot')[cp].classList.remove('active');
+  cp=n;
+  document.querySelectorAll('.page')[cp].classList.add('active');
+  document.querySelectorAll('.nav-dot')[cp].classList.add('active');
+  document.getElementById('btnPrev').disabled=cp===0;
+  document.getElementById('btnNext').disabled=cp===TP-1;
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ═══════ TASK DATA (localStorage) ═══════
-let T = JSON.parse(localStorage.getItem('wf_tasks_v2') || '[]');
-function saveT() { localStorage.setItem('wf_tasks_v2', JSON.stringify(T)); }
-
-function addTask() {
-  const inp = document.getElementById('taskInput');
-  const text = inp.value.trim();
-  if (!text) return;
-  T.push({ id: Date.now().toString(), text, status: 'todo', at: new Date().toISOString() });
-  inp.value = '';
-  saveT(); renderTasks();
+// ── Tasks ──
+let T=JSON.parse(localStorage.getItem('wf_tasks_v3')||'[]');
+function sT(){localStorage.setItem('wf_tasks_v3',JSON.stringify(T));}
+function addTask(){
+  const v=document.getElementById('taskInput').value.trim(); if(!v)return;
+  T.push({id:Date.now().toString(),text:v,status:'todo',at:new Date().toISOString()});
+  document.getElementById('taskInput').value=''; sT(); rT();
 }
-
-function cycleTask(id) {
-  const t = T.find(x => x.id === id);
-  if (!t) return;
-  if (t.status === 'todo') t.status = 'doing';
-  else if (t.status === 'doing') t.status = 'done';
-  else { T = T.filter(x => x.id !== id); }
-  saveT(); renderTasks();
+function cyc(id){
+  const t=T.find(x=>x.id===id); if(!t)return;
+  if(t.status==='todo')t.status='doing'; else if(t.status==='doing')t.status='done'; else{T=T.filter(x=>x.id!==id);}
+  sT(); rT();
 }
-
-function renderTasks() {
-  const col = { todo: document.getElementById('colTodo'), doing: document.getElementById('colDoing'), done: document.getElementById('colDone') };
-
-  for (const k of Object.keys(col)) {
-    const items = T.filter(t => t.status === k);
-    if (items.length === 0) {
-      col[k].innerHTML = '<div class="empty-hint">' + ({ todo: '暂无待办', doing: '暂无任务', done: '暂无记录' })[k] + '</div>';
-    } else {
-      col[k].innerHTML = items.map(t =>
-        `<div class="task-card" onclick="cycleTask('${t.id}')">${t.text}</div>`
-      ).join('');
-    }
+function rT(){
+  const c={todo:document.getElementById('colTodo'),doing:document.getElementById('colDoing'),done:document.getElementById('colDone')};
+  for(const[k,el]of Object.entries(c)){
+    const items=T.filter(t=>t.status===k);
+    el.innerHTML=items.length?items.map(t=>`<div class="task-card" onclick="cyc('${t.id}')">${t.text}</div>`).join(''):`<div style="color:var(--text-faint);font-size:0.75rem;padding:8px 0;">—</div>`;
   }
 }
 
-// ═══════ IDEAS (from JSON) ═══════
-async function loadIdeas() {
-  const list = document.getElementById('ideaList');
-  try {
-    const r = await fetch('workflow-ideas.json?t=' + Date.now());
-    if (!r.ok) throw new Error('fetch failed');
-    const data = await r.json();
-    localStorage.setItem('wf_ideas_cache', JSON.stringify(data));
-    renderIdeas(data.ideas);
-  } catch {
-    const cached = localStorage.getItem('wf_ideas_cache');
-    if (cached) { renderIdeas(JSON.parse(cached).ideas); }
-    else { list.innerHTML = '<div class="empty-hint">灵感数据加载中…</div>'; }
-  }
+// ── Ideas ──
+async function lI(){
+  const el=document.getElementById('ideaList');
+  try{const r=await fetch('workflow-ideas.json?t='+Date.now());if(!r.ok)throw 0;
+    const d=await r.json();localStorage.setItem('wf_ic',JSON.stringify(d));rI(d.ideas);}
+  catch{const c=localStorage.getItem('wf_ic');if(c)rI(JSON.parse(c).ideas);else el.innerHTML='<div style="color:var(--text-faint);font-size:0.8rem;">还没有灵感 ✨</div>';}
+}
+function rI(ideas){
+  const el=document.getElementById('ideaList');
+  if(!ideas||!ideas.length){el.innerHTML='<div style="color:var(--text-faint);font-size:0.8rem;">还没有灵感，跟 Cola 聊聊就有了 ✨</div>';return;}
+  el.innerHTML=ideas.map(i=>`<div class="idea-item"><span class="idea-cat">${i.category}</span><span class="idea-text">${i.text}</span><span class="idea-date">${i.date}</span></div>`).join('');
 }
 
-function renderIdeas(ideas) {
-  const list = document.getElementById('ideaList');
-  if (!ideas || ideas.length === 0) {
-    list.innerHTML = '<div class="empty-hint">还没有灵感，跟 Cola 聊聊就有了 ✨</div>';
-    return;
-  }
-  list.innerHTML = ideas.map(i =>
-    `<div class="idea-card">
-      <span class="idea-badge badge-${(i.category||'生活').toLowerCase()}">${i.category}</span>
-      <span class="idea-text">${i.text}</span>
-      <span class="idea-date">${i.date}</span>
-    </div>`
-  ).join('');
+// ── Papers ──
+let PD={papers:[],recommendations:[]};
+async function lP(){
+  try{const r=await fetch('workflow-papers.json?t='+Date.now());if(!r.ok)throw 0;
+    PD=await r.json();localStorage.setItem('wf_pc',JSON.stringify(PD));}
+  catch{const c=localStorage.getItem('wf_pc');if(c)PD=JSON.parse(c);}
+  fP(); rR();
+}
+function fP(){
+  const q=(document.getElementById('paperSearch')?.value||'').toLowerCase().trim();
+  const el=document.getElementById('paperList');
+  if(!PD.papers){el.innerHTML='<div style="color:var(--text-faint);font-size:0.8rem;">加载中…</div>';return;}
+  let fl=PD.papers;
+  if(q)fl=fl.filter(p=>(p.title||'').toLowerCase().includes(q)||(p.summary||'').toLowerCase().includes(q)||(p.tags||[]).some(t=>t.toLowerCase().includes(q)));
+  if(!fl.length){el.innerHTML=`<div style="color:var(--text-faint);font-size:0.8rem;">${q?'没有匹配的论文':'论文数据库加载中…'}</div>`;return;}
+  el.innerHTML=fl.map(p=>`<div class="paper-item"><h4 class="serif-i">${p.title}</h4><p>${p.summary}</p><div class="paper-tags">${(p.tags||[]).map(t=>'<span>'+t+'</span>').join('')}</div></div>`).join('');
+}
+function rR(){
+  const el=document.getElementById('recList');
+  const rs=PD.recommendations||[];
+  if(!rs.length){el.innerHTML='<div style="color:var(--text-faint);font-size:0.8rem;padding:20px;">今天的推荐还在路上…</div>';return;}
+  el.innerHTML=rs.map(r=>`<div class="rec-item"><h4 class="serif-i">${r.title}</h4><div class="paper-tags" style="margin:6px 0">${(r.tags||[]).map(t=>'<span>'+t+'</span>').join('')}</div><p class="why">${r.why}</p></div>`).join('');
 }
 
-// ═══════ PAPERS (from JSON) ═══════
-let PapersData = { papers: [], recommendations: [] };
-
-async function loadPapers() {
-  try {
-    const r = await fetch('workflow-papers.json?t=' + Date.now());
-    if (!r.ok) throw new Error('fetch failed');
-    PapersData = await r.json();
-    localStorage.setItem('wf_papers_cache', JSON.stringify(PapersData));
-  } catch {
-    const cached = localStorage.getItem('wf_papers_cache');
-    if (cached) PapersData = JSON.parse(cached);
-  }
-  filterPapers();
-  renderRecs();
-}
-
-function filterPapers() {
-  const q = (document.getElementById('paperSearch')?.value || '').toLowerCase().trim();
-  const list = document.getElementById('paperList');
-  if (!PapersData.papers) { list.innerHTML = '<div class="empty-hint">论文数据加载中…</div>'; return; }
-
-  let filtered = PapersData.papers;
-  if (q) {
-    filtered = filtered.filter(p =>
-      (p.title || '').toLowerCase().includes(q) ||
-      (p.summary || '').toLowerCase().includes(q) ||
-      (p.tags || []).some(t => t.toLowerCase().includes(q))
-    );
-  }
-
-  if (filtered.length === 0) {
-    list.innerHTML = '<div class="empty-hint">' + (q ? '没有匹配的论文，试试别的关键词？' : '论文数据库加载中…') + '</div>';
-    return;
-  }
-  list.innerHTML = filtered.map(p =>
-    `<div class="paper-card">
-      <h4>${p.title}</h4>
-      <p>${p.summary}</p>
-      <div class="paper-tags">${(p.tags||[]).map(t => `<span class="paper-tag">${t}</span>`).join('')}</div>
-    </div>`
-  ).join('');
-}
-
-function renderRecs() {
-  const list = document.getElementById('recList');
-  const recs = PapersData.recommendations || [];
-  if (recs.length === 0) {
-    list.innerHTML = '<div class="empty-hint" style="padding:20px">今天的推荐还在路上…</div>';
-    return;
-  }
-  list.innerHTML = recs.map(r =>
-    `<div class="rec-card">
-      <h4>${r.title}</h4>
-      <div class="paper-tags" style="margin:6px 0">${(r.tags||[]).map(t => `<span class="paper-tag">${t}</span>`).join('')}</div>
-      <p class="rec-why">${r.why}</p>
-    </div>`
-  ).join('');
-}
-
-// ═══════ CONCEPTS ═══════
-const concepts = [
-  { name: 'MEP', def: '运动诱发电位——TMS刺激运动皮层后在靶肌肉记录到的电信号，反映皮质脊髓通路兴奋性。' },
-  { name: '皮质脊髓束', def: '从运动皮层到脊髓运动神经元的直接通路，控制随意运动。' },
-  { name: 'LTP', def: '长时程增强——突触传递效率的持久增强，是学习和记忆的细胞基础。' },
-  { name: 'LTD', def: '长时程抑制——突触传递效率的持久减弱，与LTP共同调节神经可塑性。' },
-  { name: 'SICI', def: '短间隔皮层内抑制——条件刺激后1-5ms的测试刺激MEP被抑制，反映GABA_A介导的抑制。' },
-  { name: 'ICF', def: '皮层内易化——条件刺激后8-30ms的测试刺激MEP增强，反映谷氨酸能兴奋。' },
-  { name: 'TBS', def: 'Theta爆发式刺激——模拟海马theta节律的TMS模式，iTBS增强、cTBS抑制皮层兴奋性。' },
-  { name: '神经可塑性', def: '神经系统响应经验改变结构和功能的能力，是学习和康复的核心机制。' },
-  { name: '筋膜CC点', def: '协调中心（Centre of Coordination）——意大利筋膜手法中的关键触诊和治疗点。' },
-  { name: 'AN-LU', def: '前向序列-上肢（Ante-Latero Upper）——筋膜手法中的特定运动序列。' },
-  { name: 'RE-LU', def: '后向序列-上肢（Retro-Latero Upper）——筋膜手法中的特定运动序列。' },
+// ── Concepts ──
+const CN=[
+  {n:'MEP',d:'运动诱发电位——TMS刺激运动皮层后在靶肌肉记录到的电信号。'},
+  {n:'皮质脊髓束',d:'从运动皮层到脊髓运动神经元的直接通路，控制随意运动。'},
+  {n:'LTP',d:'长时程增强——突触传递效率的持久增强，学习和记忆的细胞基础。'},
+  {n:'LTD',d:'长时程抑制——突触传递效率的持久减弱。'},
+  {n:'SICI',d:'短间隔皮层内抑制——反映GABA_A介导的皮层抑制。'},
+  {n:'ICF',d:'皮层内易化——反映谷氨酸能兴奋性。'},
+  {n:'TBS',d:'Theta爆发式刺激——iTBS增强、cTBS抑制皮层兴奋性。'},
+  {n:'神经可塑性',d:'神经系统响应经验改变结构和功能的能力。'},
+  {n:'筋膜CC点',d:'协调中心，意大利筋膜手法中的关键触诊点。'},
+  {n:'AN-LU',d:'前向序列-上肢，筋膜手法特定运动序列。'},
+  {n:'RE-LU',d:'后向序列-上肢，筋膜手法特定运动序列。'},
 ];
-
-function renderConcepts() {
-  document.getElementById('conceptGrid').innerHTML = concepts.map(c =>
-    `<div class="concept-tag">
-      ${c.name}
-      <span class="concept-tooltip">${c.def}</span>
-    </div>`
-  ).join('');
+function rC(){
+  document.getElementById('conceptGrid').innerHTML=CN.map(c=>`<div class="concept-tag">${c.n}<span class="concept-tooltip">${c.d}</span></div>`).join('');
 }
 
-// ═══════ INIT ═══════
-renderTasks();
-loadIdeas();
-loadPapers();
-renderConcepts();
+// ── Init ──
+rT(); lI(); lP(); rC();
 </script>
 </body>
 </html>
