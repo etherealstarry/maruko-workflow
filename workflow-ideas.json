@@ -9,6 +9,8 @@
     {"id":"i7","category":"工具","text":"丸子梦工厂使用复盘 —— 记录第一周的感受、bug、新功能愿望清单","date":"5/5"},
     {"id":"i8","category":"TMS","text":"运动控制综述精读 —— 从 24 篇中选 3 篇最相关的，用 48 小时法学透","date":"5/4"},
     {"id":"i9","category":"学习","text":"统计预习第 1 步 —— 打开 Motulsky，丢核心概念框架问题给 AI","date":"5/4"},
-    {"id":"i10","category":"TMS","text":"SICI AP/PA 电流方向论文 —— 读那篇关于电流方向影响 SICI 的研究","date":"5/3"}
+    {"id":"i10","category":"TMS","text":"SICI AP/PA 电流方向论文 —— 读那篇关于电流方向影响 SICI 的研究","date":"5/3"},
+    {"id":"i11","category":"TMS","text":"实验设计入门 —— 不求设备说明书式，走「我要测 SICI→需要什么参数→怎么设置」路线","date":"5/7"},
+    {"id":"i12","category":"工具","text":"工作流 cron 可靠性审计 —— 为什么连续三天挂掉？修好后加自检通知","date":"5/8"}
   ]
 }
